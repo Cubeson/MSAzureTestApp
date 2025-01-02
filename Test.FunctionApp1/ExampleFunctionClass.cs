@@ -6,8 +6,10 @@ namespace Test.FunctionApp1;
 public class ExampleFunctionClass
 {
     [Function("HttpExample")]
-    public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+    public IActionResult Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
     {
-        return new OkObjectResult("Welcome to Azure Functions!");
+        var q = req.QueryString.ToString();
+        return new OkObjectResult(q);
     }
 }
