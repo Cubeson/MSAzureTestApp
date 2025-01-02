@@ -9,7 +9,6 @@ public class ExampleFunctionClass
     public IActionResult Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
     {
-        var q = req.QueryString.ToString();
-        return new OkObjectResult(q);
+        return new OkObjectResult("Nice!");
     }
 }
