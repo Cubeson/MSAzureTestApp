@@ -9,10 +9,12 @@ namespace Test.FunctionApp1.Functions;
 public class PersonFunctions
 {
     private readonly AppDbContext _context;
+    private readonly ILogger _logger;
 
-    public PersonFunctions(AppDbContext context)
+    public PersonFunctions(AppDbContext context, ILogger<PersonFunctions> logger)
     {
         _context = context;
+        _logger = logger;
     }
     
     [Function("GetPersons")]
@@ -20,8 +22,7 @@ public class PersonFunctions
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "persons")] HttpRequestData req,
         FunctionContext executionContext)
     {
-        var logger = executionContext.GetLogger("GetPersons");
-        logger.LogInformation("Fetching all persons from the database.");
+        _logger.LogInformation("Fetching all persons from the database.");
 
         var persons = await _context.Persons.ToListAsync();
 
@@ -35,8 +36,7 @@ public class PersonFunctions
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "persons")] HttpRequestData req,
         FunctionContext executionContext)
     {
-        var logger = executionContext.GetLogger("AddPerson");
-        logger.LogInformation("Adding a new person to the database.");
+        _logger.LogInformation("Adding a new person to the database.");
 
         var person = await req.ReadFromJsonAsync<Person>();
         _context.Persons.Add(person);
